@@ -124,7 +124,7 @@ In PHP:
 
 Or in JavaScript:
 
-    KontagentFacebook.ktApi;
+    KT_FB.getKontagentApi();
 
 
 

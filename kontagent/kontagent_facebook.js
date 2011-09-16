@@ -8,6 +8,12 @@ KT_FB.api = FB.api;
 // instantiate the Kontagent JS API
 KT_FB.ktApi = new KontagentApi(KT_API_KEY, {"useTestServer": KT_USE_TEST_SERVER});
 
+KT_FB.getKontagentApi = function() 
+{
+	return KT_FB.ktApi;
+}
+
+
 KT_FB.init = function(options) 
 {
 	FB.init(options);
