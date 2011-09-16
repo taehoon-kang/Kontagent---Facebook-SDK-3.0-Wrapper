@@ -187,30 +187,30 @@ class KontagentFacebook extends Facebook
 	
 	// Returns the Requests Dialog url. This method takes in the parameters defined by Facebook
 	// (see FB documentation) as well as 'subtype1', 'subtype2', 'subtype3' values.
-	public function getRequestsDialogUrl($fbParams = array(), $ktParams = array())
+	public function getRequestsDialogUrl($params = array())
 	{
 		$uniqueTrackingTag = $this->ktApi->genUniqueTrackingTag();
 		
-		$fbParams['redirect_uri'] = $this->appendKtVarsToUrl(
-			(isset($fbParams['redirect_uri'])) ? $fbParams['redirect_uri'] : $this->getCurrentUrl(true),
+		$params['redirect_uri'] = $this->appendKtVarsToUrl(
+			(isset($params['redirect_uri'])) ? $params['redirect_uri'] : $this->getCurrentUrl(true),
 			array(
 				'kt_track_ins' => 1,
 				'kt_u' => $uniqueTrackingTag,
-				'kt_st1' => (isset($ktParams['subtype1'])) ? $ktParams['subtype1'] : null,
-				'kt_st2' => (isset($ktParams['subtype2'])) ? $ktParams['subtype2'] : null,
-				'kt_st3' => (isset($ktParams['subtype3'])) ? $ktParams['subtype3'] : null
+				'kt_st1' => (isset($params['subtype1'])) ? $params['subtype1'] : null,
+				'kt_st2' => (isset($params['subtype2'])) ? $params['subtype2'] : null,
+				'kt_st3' => (isset($params['subtype3'])) ? $params['subtype3'] : null
 			)
 		);
 		
 		// append tracking variables to link 
 		// TODO: append these variables to ALL possible links (properties, actions - see: http://developers.facebook.com/docs/reference/dialogs/feed/)
-		$fbParams['data'] = $this->appendKtVarsToDataField(
-			$fbParams['data'],
+		$params['data'] = $this->appendKtVarsToDataField(
+			$params['data'],
 			array(
 				'kt_u' => $uniqueTrackingTag,
-				'kt_st1' => (isset($ktParams['subtype1'])) ? $ktParams['subtype1'] : null,
-				'kt_st2' => (isset($ktParams['subtype2'])) ? $ktParams['subtype2'] : null,
-				'kt_st3' => (isset($ktParams['subtype3'])) ? $ktParams['subtype3'] : null
+				'kt_st1' => (isset($params['subtype1'])) ? $params['subtype1'] : null,
+				'kt_st2' => (isset($params['subtype2'])) ? $params['subtype2'] : null,
+				'kt_st3' => (isset($params['subtype3'])) ? $params['subtype3'] : null
 			)
 		);
 	
@@ -219,7 +219,7 @@ class KontagentFacebook extends Facebook
 			'dialog/apprequests',
 			array_merge(
 				array('app_id' => $this->getAppId()),
-				$fbParams
+				$params
 			)
 		);
 	}
@@ -259,15 +259,15 @@ class KontagentFacebook extends Facebook
 
 		echo 'var KT_GET = [];';
 
-		// TODO: fix this mess :)
 		foreach($_GET as $key => $val) {
-			if (is_numeric($val)) {
-				echo 'KT_GET["' . $key . '"] = ' . $val . ';';
-			} else if (is_array($val)) {
+			if (is_array($val)) {
 				echo 'KT_GET["' . $key . '"] = [];';
-				foreach($val as $k => $v) {
-					echo 'KT_GET["' . $key . '"][' . $k . '] = ' . $v . ';';
+
+				for($i=0; $i<sizeof($val); $i++) {
+					echo 'KT_GET["' . $key . '"][' . $i . '] = ' . $val[$i] . ';';
 				}
+			} else if (is_numeric($val)) {
+				echo 'KT_GET["' . $key . '"] = ' . $val . ';';
 			} else {
 				echo 'KT_GET["' . $key . '"] = "' . $val . '";';
 			}
