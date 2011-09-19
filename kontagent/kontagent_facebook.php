@@ -347,7 +347,7 @@ class KontagentFacebook extends Facebook
 					));
 				}
 				
-				if ($_GET['kt_track_ins'] && isset($_GET['request_ids']) && is_array($_GET['request_ids'])) {
+				if (isset($_GET['kt_track_ins']) && isset($_GET['request_ids']) && is_array($_GET['request_ids'])) {
 					$this->ktApi->trackInviteSent(
 						$this->getUser(),
 						implode(',', $_GET['request_ids']),
@@ -360,7 +360,7 @@ class KontagentFacebook extends Facebook
 					);
 				}
 				
-				if ($_GET['kt_track_pst'] && isset($_GET['post_id'])) {
+				if (isset($_GET['kt_track_pst']) && isset($_GET['post_id'])) {
 					$this->ktApi->trackStreamPost($this->getUser(), $_GET['kt_u'], 'stream', array(
 						'subtype1' => (isset($_GET['kt_st1'])) ? $_GET['kt_st1'] : null,
 						'subtype2' => (isset($_GET['kt_st2'])) ? $_GET['kt_st2'] : null,
@@ -370,7 +370,7 @@ class KontagentFacebook extends Facebook
 			}
 			
 		
-			if ($_GET['kt_track_psr']) {
+			if (isset($_GET['kt_track_psr'])) {
 				$this->ktApi->trackStreamPostResponse($_GET['kt_u'], 'stream', array(
 					'recipientUserId' => ($this->getUser()) ? $this->getUser() : null,
 					'subtype1' => (isset($_GET['kt_st1'])) ? $_GET['kt_st1'] : null,
@@ -379,7 +379,7 @@ class KontagentFacebook extends Facebook
 				));
 			}
 			
-			if ($_GET['kt_type']) {
+			if (isset($_GET['kt_type'])) {
 				// generate an short tracking tag. We store it in $_GET because
 				// this is where the code looks for it when an application added is triggered.
 				$_GET['kt_su'] = $this->ktApi->genShortUniqueTrackingTag();
@@ -430,7 +430,7 @@ class KontagentFacebook extends Facebook
 	{
 		list($otherDataString, $ktDataString) = explode('|', $dataString);
 		
-		parse_str($ktDataString, &$ktDataVars);
+		parse_str($ktDataString, $ktDataVars);
 		
 		return $ktDataVars;
 	}
@@ -1057,6 +1057,7 @@ class KtValidator
 	* @param string $validationErrorMsg If the parameter value is invalid, this will be populated with the error message
 	*
 	* @returns bool Returns true on success and false on failure.
+
 	*/
 	public static function validateParameter($messageType, $paramName, $paramValue, &$validationErrorMsg = null) {
 		// generate name of the dynamic method
