@@ -205,7 +205,7 @@ class KontagentFacebook extends Facebook
 		// append tracking variables to link 
 		// TODO: append these variables to ALL possible links (properties, actions - see: http://developers.facebook.com/docs/reference/dialogs/feed/)
 		$params['data'] = $this->appendKtVarsToDataField(
-			$params['data'],
+			isset($params['data']) ? $params['data'] : '',
 			array(
 				'kt_u' => $uniqueTrackingTag,
 				'kt_st1' => (isset($params['subtype1'])) ? $params['subtype1'] : null,
