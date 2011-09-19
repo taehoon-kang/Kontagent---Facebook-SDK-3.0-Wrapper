@@ -31,7 +31,7 @@ KT_FB.login = function (cb, opts) {
 			// Track Application Added
 			KT_FB.ktApi.trackApplicationAdded(loginResponse.authResponse.userID, {
 				"uniqueTrackingTag": (KT_GET["kt_u"]) ? KT_GET["kt_u"] : null,
-				"shortUniqueTrackingTag": (KT_GET["kt_su"]) ? KT_GET["kt_su"] : null,
+				"shortUniqueTrackingTag": (KT_GET["kt_su"]) ? KT_GET["kt_su"] : null
 			});
 			
 			// Track User Information
