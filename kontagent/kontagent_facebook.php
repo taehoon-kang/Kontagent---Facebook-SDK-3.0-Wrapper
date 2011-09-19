@@ -274,6 +274,7 @@ class KontagentFacebook extends Facebook
 		}
 
 		echo '</script>';
+
 	}
 	
 	// Performs the landing page tracking.
@@ -477,11 +478,13 @@ class KontagentFacebook extends Facebook
 			}
 		}
 
+		$query = '';
+
 		if (!empty($retainedVars)) {
 			$query = '?' . implode($retainedVars, '&');
 		}
 		
-		$port = ($parts['port']) ? ':' . $parts['port'] : '';
+		$port = (isset($parts['port'])) ? ':' . $parts['port'] : '';
 		
 		return $parts['scheme'] . '://' . $parts['host'] . $port . $parts['path'] . $query;
 	}
@@ -626,9 +629,9 @@ class KontagentApi {
 			'u' => $uniqueTrackingTag
 		);
 		
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 			
 		return $this->sendMessage("ins", $params, $validationErrorMsg);
 	}
@@ -654,10 +657,10 @@ class KontagentApi {
 			'u' => $uniqueTrackingTag
 		);
 		
-		if ($optionalParams['recipientUserId']) { $params['r'] = $optionalParams['recipientUserId']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['recipientUserId'])) { $params['r'] = $optionalParams['recipientUserId']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("inr", $params, $validationErrorMsg);
 	}
@@ -685,9 +688,9 @@ class KontagentApi {
 			'u' => $uniqueTrackingTag
 		);
 		
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 		
 		return $this->sendMessage("nts", $params, $validationErrorMsg);
 	}
@@ -713,10 +716,10 @@ class KontagentApi {
 			'u' => $uniqueTrackingTag
 		);
 		
-		if ($optionalParams['recipientUserId']) { $params['r'] = $optionalParams['recipientUserId']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['recipientUserId'])) { $params['r'] = $optionalParams['recipientUserId']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("ntr", $params, $validationErrorMsg);
 	}
@@ -744,9 +747,9 @@ class KontagentApi {
 			'u' => $uniqueTrackingTag
 		);
 		
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("nes", $params, $validationErrorMsg);
 	}
@@ -772,10 +775,10 @@ class KontagentApi {
 			'u' => $uniqueTrackingTag
 		);
 		
-		if ($optionalParams['recipientUserId']) { $params['r'] = $optionalParams['recipientUserId']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }	
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['recipientUserId'])) { $params['r'] = $optionalParams['recipientUserId']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }	
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("nei", $params, $validationErrorMsg);
 	}
@@ -804,9 +807,9 @@ class KontagentApi {
 			'tu' => $type
 		);
 		
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 		
 		return $this->sendMessage("pst", $params, $validationErrorMsg);
 	}
@@ -835,10 +838,10 @@ class KontagentApi {
 			'tu' => $type
 		);
 		
-		if ($optionalParams['recipientUserId']) { $params['r'] = $optionalParams['recipientUserId']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['recipientUserId'])) { $params['r'] = $optionalParams['recipientUserId']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("psr", $params, $validationErrorMsg);
 	}
@@ -864,11 +867,11 @@ class KontagentApi {
 			'n' => $eventName
 		);
 		
-		if ($optionalParams['value']) { $params['v'] = $optionalParams['value']; }
-		if ($optionalParams['level']) { $params['l'] = $optionalParams['level']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['value'])) { $params['v'] = $optionalParams['value']; }
+		if (isset($optionalParams['level'])) { $params['l'] = $optionalParams['level']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("evt", $params, $validationErrorMsg);
 	}
@@ -891,8 +894,8 @@ class KontagentApi {
 	public function trackApplicationAdded($userId, $optionalParams = array(), &$validationErrorMsg = null) {
 		$params = array('s' => $userId);
 		
-		if ($optionalParams['uniqueTrackingTag']) { $params['u'] = $optionalParams['uniqueTrackingTag']; }
-		if ($optionalParams['shortUniqueTrackingTag']) { $params['su'] = $optionalParams['shortUniqueTrackingTag']; }
+		if (isset($optionalParams['uniqueTrackingTag'])) { $params['u'] = $optionalParams['uniqueTrackingTag']; }
+		if (isset($optionalParams['shortUniqueTrackingTag'])) { $params['su'] = $optionalParams['shortUniqueTrackingTag']; }
 	
 		return $this->sendMessage("apa", $params, $validationErrorMsg);
 	}
@@ -932,11 +935,11 @@ class KontagentApi {
 			'tu' => $type
 		);
 		
-		if ($optionalParams['shortUniqueTrackingTag']) { $params['su'] = $optionalParams['shortUniqueTrackingTag']; }
-		if ($optionalParams['userId']) { $params['s'] = $optionalParams['userId']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }	
+		if (isset($optionalParams['shortUniqueTrackingTag'])) { $params['su'] = $optionalParams['shortUniqueTrackingTag']; }
+		if (isset($optionalParams['userId'])) { $params['s'] = $optionalParams['userId']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }	
 	
 		return $this->sendMessage("ucc", $params, $validationErrorMsg);
 	}
@@ -958,8 +961,8 @@ class KontagentApi {
 			'ts' => time() 
 		);
 		
-		if ($optionalParams['ipAddress']) { $params['ip'] = $optionalParams['ipAddress']; }
-		if ($optionalParams['pageAddress']) { $params['u'] = $optionalParams['pageAddress']; }
+		if (isset($optionalParams['ipAddress'])) { $params['ip'] = $optionalParams['ipAddress']; }
+		if (isset($optionalParams['pageAddress'])) { $params['u'] = $optionalParams['pageAddress']; }
 	
 		return $this->sendMessage("pgr", $params, $validationErrorMsg);
 	}
@@ -980,10 +983,10 @@ class KontagentApi {
 	public function trackUserInformation($userId, $optionalParams = array(), &$validationErrorMsg = null) {
 		$params = array('s' => $userId);
 		
-		if ($optionalParams['birthYear']) { $params['b'] = $optionalParams['birthYear']; }
-		if ($optionalParams['gender']) { $params['g'] = $optionalParams['gender']; }
-		if ($optionalParams['country']) { $params['lc'] = strtoupper($optionalParams['country']); }
-		if ($optionalParams['friendCount']) { $params['f'] = $optionalParams['friendCount']; }
+		if (isset($optionalParams['birthYear'])) { $params['b'] = $optionalParams['birthYear']; }
+		if (isset($optionalParams['gender'])) { $params['g'] = $optionalParams['gender']; }
+		if (isset($optionalParams['country'])) { $params['lc'] = strtoupper($optionalParams['country']); }
+		if (isset($optionalParams['friendCount'])) { $params['f'] = $optionalParams['friendCount']; }
 
 		return $this->sendMessage("cpu", $params, $validationErrorMsg);
 	}
@@ -1004,10 +1007,10 @@ class KontagentApi {
 	public function trackGoalCount($userId, $optionalParams = array(), &$validationErrorMsg = null) {
 		$params = array('s' => $userId);
 		
-		if ($optionalParams['goalCount1']) { $params['gc1'] = $optionalParams['goalCount1']; }
-		if ($optionalParams['goalCount2']) { $params['gc2'] = $optionalParams['goalCount2']; }
-		if ($optionalParams['goalCount3']) { $params['gc3'] = $optionalParams['goalCount3']; }
-		if ($optionalParams['goalCount4']) { $params['gc4'] = $optionalParams['goalCount4']; }
+		if (isset($optionalParams['goalCount1'])) { $params['gc1'] = $optionalParams['goalCount1']; }
+		if (isset($optionalParams['goalCount2'])) { $params['gc2'] = $optionalParams['goalCount2']; }
+		if (isset($optionalParams['goalCount3'])) { $params['gc3'] = $optionalParams['goalCount3']; }
+		if (isset($optionalParams['goalCount4'])) { $params['gc4'] = $optionalParams['goalCount4']; }
 	
 		return $this->sendMessage("gci", $params, $validationErrorMsg);
 	}
@@ -1032,10 +1035,10 @@ class KontagentApi {
 			'v' => $value
 		);
 		
-		if ($optionalParams['type']) { $params['tu'] = $optionalParams['type']; }
-		if ($optionalParams['subtype1']) { $params['st1'] = $optionalParams['subtype1']; }
-		if ($optionalParams['subtype2']) { $params['st2'] = $optionalParams['subtype2']; }
-		if ($optionalParams['subtype3']) { $params['st3'] = $optionalParams['subtype3']; }
+		if (isset($optionalParams['type'])) { $params['tu'] = $optionalParams['type']; }
+		if (isset($optionalParams['subtype1'])) { $params['st1'] = $optionalParams['subtype1']; }
+		if (isset($optionalParams['subtype2'])) { $params['st2'] = $optionalParams['subtype2']; }
+		if (isset($optionalParams['subtype3'])) { $params['st3'] = $optionalParams['subtype3']; }
 	
 		return $this->sendMessage("mtu", $params, $validationErrorMsg);
 	}
