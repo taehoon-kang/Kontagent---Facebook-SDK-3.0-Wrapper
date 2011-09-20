@@ -257,6 +257,14 @@ class KontagentFacebook extends Facebook
 			echo 'var KT_SEND_CLIENT_SIDE = false;';
 		}
 
+		if (KT_USE_HTTPS == 'auto') {
+			echo 'var KT_USE_HTTPS = "auto";';
+		} else if (KT_USE_HTTPS == true) {
+			echo 'var KT_USE_HTTPS = true;';
+		} else {
+			echo 'var KT_USE_HTTPS = false;';
+		}
+
 		echo 'var KT_GET = [];';
 
 		foreach($_GET as $key => $val) {
@@ -274,6 +282,8 @@ class KontagentFacebook extends Facebook
 		}
 
 		echo '</script>';
+
+
 
 	}
 	
@@ -330,7 +340,7 @@ class KontagentFacebook extends Facebook
 						
 						$gender = substr($userInfo['gender'], 0, 1);
 						
-						if ($userInfo['birthday']) {
+						if (isset($userInfo['birthday'])) {
 							$birthdayPieces = explode('/', $userInfo['birthday']);
 							
 							if (sizeof($birthdayPieces) == 3) {
@@ -517,11 +527,12 @@ class KontagentFacebook extends Facebook
 ////////////////////////////////////////////////////////////////////////////////	
 	
 class KontagentApi {
-	private $baseApiUrl = "http://api.geo.kontagent.net/api/v1/";
+	private $baseApiUrl = "http://api.geo.kontagent.com/api/v1/";
 	private $baseTestServerUrl = "http://test-server.kontagent.net/api/v1/";
 	
 	private $apiKey = null;
 	private $validateParams = null;
+
 	private $useTestServer = null;
 	
 	private $useCurl = null;
