@@ -8,23 +8,27 @@ BASE_FB.api = FB.api;
 // instantiate the Kontagent JS API
 var useHttps;
 
-FB.ktApi = new KontagentApi(KT_API_KEY, {
-	"useTestServer": KT_USE_TEST_SERVER, 
-	"useHttps": (KT_USE_HTTPS == 'auto') ? FB._isHttps() : KT_USE_HTTPS
-});
+// reference to Kontagent API object. Instantiated in FB.init().
+FB._ktApi = null;
 
 FB.getKontagentApi = function() 
 {
-	return FB.ktApi;
+	return FB._ktApi;
 }
 
 
 FB.init = function(options) 
 {
 	BASE_FB.init(options);
+
+	// instantiate Kontagent API object
+	FB._ktApi = new KontagentApi(KT_API_KEY, {
+		"useTestServer": KT_USE_TEST_SERVER, 
+		"useHttps": (KT_USE_HTTPS == 'auto') ? FB._isHttps() : KT_USE_HTTPS
+	})
 	
 	// Perform the landing page tracking. The timeout/delay is neccessary otherwise
-	// FB will throw an error if we start using the API too quickly.
+	// FB will throw an error if we start making API calls too quickly.
 	setTimeout("FB._trackLanding()", 1000);
 }
 
@@ -34,7 +38,7 @@ FB.login = function (cb, opts) {
 	var ktCb = function (loginResponse) {
 		if (loginResponse.authResponse) {
 			// Track Application Added
-			FB.ktApi.trackApplicationAdded(loginResponse.authResponse.userID, {
+			FB._ktApi.trackApplicationAdded(loginResponse.authResponse.userID, {
 				"uniqueTrackingTag": (KT_GET["kt_u"]) ? KT_GET["kt_u"] : null,
 				"shortUniqueTrackingTag": (KT_GET["kt_su"]) ? KT_GET["kt_su"] : null
 			});
@@ -58,7 +62,7 @@ FB.login = function (cb, opts) {
 						friendCount = apiFriendsResponse.data.length;
 					}
 					
-					FB.ktApi.trackUserInformation(loginResponse.authResponse.userID, {
+					FB._ktApi.trackUserInformation(loginResponse.authResponse.userID, {
 						"gender": gender,
 						"birthYear": birthYear,
 						"friendCount": friendCount
@@ -77,7 +81,7 @@ FB.login = function (cb, opts) {
 FB.ui = function (params, cb) {
 	var ktCb = cb;
 
-	var authResponse = BASE_FB.getAuthResponse();
+	var authResponse = FB.getAuthResponse();
 	
 	// Make sure the user is logged in and authenticated
 	if (authResponse && authResponse.userID) {	
@@ -85,7 +89,7 @@ FB.ui = function (params, cb) {
 		// to call.
 		switch(params.method.toLowerCase()) {
 			case 'apprequests':
-				var uniqueTrackingTag = FB.ktApi.genUniqueTrackingTag();
+				var uniqueTrackingTag = FB._ktApi.genUniqueTrackingTag();
 			
 				// Append Kontagents tracking parameters to the data param.
 				params.data = FB._appendKtVarsToDataField(params.data, {
@@ -98,7 +102,7 @@ FB.ui = function (params, cb) {
 				
 				ktCb = function(uiResponse) {
 					if (uiResponse && uiResponse.request_ids && uiResponse.request_ids.length > 0) {
-						FB.ktApi.trackInviteSent(authResponse.userID, uiResponse.request_ids.join(','), uniqueTrackingTag, {
+						FB._ktApi.trackInviteSent(authResponse.userID, uiResponse.request_ids.join(','), uniqueTrackingTag, {
 							"subtype1": params.subtype1,
 							"subtype2": params.subtype2,
 							"subtype3": params.subtype3
@@ -110,7 +114,7 @@ FB.ui = function (params, cb) {
 				break;
 				
 			case('feed'):
-				var uniqueTrackingTag = FB.ktApi.genUniqueTrackingTag();
+				var uniqueTrackingTag = FB._ktApi.genUniqueTrackingTag();
 				
 				// If there is a link, we append the Kontagent tracking parameters
 				if (params.link != null && typeof params.link != 'undefined') {
@@ -125,7 +129,7 @@ FB.ui = function (params, cb) {
 			
 				ktCb = function(uiResponse) {
 					if (uiResponse && uiResponse.post_id) {
-						FB.ktApi.trackStreamPost(authResponse.userID, uniqueTrackingTag, 'stream', {
+						FB._ktApi.trackStreamPost(authResponse.userID, uniqueTrackingTag, 'stream', {
 							"subtype1": params.subtype1,
 							"subtype2": params.subtype2,
 							"subtype3": params.subtype3
@@ -147,18 +151,18 @@ FB.ui = function (params, cb) {
 
 FB._trackLanding = function()
 {
-	var authResponse = BASE_FB.getAuthResponse();
+	var authResponse = FB.getAuthResponse();
 
 	// Page Requests are always tracked on the client side.
 	if (authResponse && authResponse.userID) {
-		FB.ktApi.trackPageRequest(authResponse.userID);
+		FB._ktApi.trackPageRequest(authResponse.userID);
 	}
 
 	if (KT_SEND_CLIENT_SIDE) {
 		if (authResponse && authResponse.userID) {
 			if (KT_GET['kt_track_apa'] && !KT_GET['error']) {
 				// Track the Application Added
-				FB.ktApi.trackApplicationAdded(authResponse.userID, {
+				FB._ktApi.trackApplicationAdded(authResponse.userID, {
 					"uniqueTrackingTag": (KT_GET['kt_u']) ? KT_GET['kt_u'] : null,
 					"shortUniqueTrackingTag": (KT_GET['kt_su']) ? KT_GET['kt_su'] : null
 				});
@@ -182,7 +186,7 @@ FB._trackLanding = function()
 							friendCount = apiFriendsResponse.data.length;
 						}
 						
-						FB.ktApi.trackUserInformation(authResponse.userID, {
+						FB._ktApi.trackUserInformation(authResponse.userID, {
 							"gender": gender,
 							"birthYear": birthYear,
 							"friendCount": friendCount
@@ -192,7 +196,7 @@ FB._trackLanding = function()
 			}
 			
 			if (KT_GET['kt_track_ins'] && FB._isArray(KT_GET['request_ids'])) {
-				FB.ktApi.trackInviteSent(
+				FB._ktApi.trackInviteSent(
 					authResponse.userID, 
 					KT_GET['request_ids'].join(','),
 					KT_GET['kt_u'],
@@ -205,7 +209,7 @@ FB._trackLanding = function()
 			}
 		
 			if (KT_GET['kt_track_pst'] && KT_GET['post_id']) {
-				FB.ktApi.trackStreamPost(authResponse.userID, KT_GET['kt_u'], 'stream', {
+				FB._ktApi.trackStreamPost(authResponse.userID, KT_GET['kt_u'], 'stream', {
 					"subtype1": (KT_GET['kt_st1']) ? KT_GET['kt_st1'] : null,
 					"subtype2": (KT_GET['kt_st2']) ? KT_GET['kt_st2'] : null,
 					"subtype3": (KT_GET['kt_st3']) ? KT_GET['kt_st3'] : null
@@ -214,7 +218,7 @@ FB._trackLanding = function()
 		}
 		
 		if (KT_GET['kt_track_psr']) {
-			FB.ktApi.trackStreamPostResponse(KT_GET['kt_u'], 'stream', {
+			FB._ktApi.trackStreamPostResponse(KT_GET['kt_u'], 'stream', {
 				"recipientUserId": (authResponse && authResponse.userID) ? authResponse.userID : null,
 				"subtype1": (KT_GET['kt_st1']) ? KT_GET['kt_st1'] : null,
 				"subtype2": (KT_GET['kt_st2']) ? KT_GET['kt_st2'] : null,
@@ -225,9 +229,9 @@ FB._trackLanding = function()
 		if (KT_GET['kt_type']) {
 			// we store it in the KT_GET variable because this is where the Application Added
 			// tracking looks for it.
-			KT_GET['kt_su'] = FB.ktApi.genShortUniqueTrackingTag();
+			KT_GET['kt_su'] = FB._ktApi.genShortUniqueTrackingTag();
 			
-			FB.ktApi.trackThirdPartyCommClick(KT_GET['kt_type'], KT_GET['kt_su'], {
+			FB._ktApi.trackThirdPartyCommClick(KT_GET['kt_type'], KT_GET['kt_su'], {
 				"userId": (authResponse && authResponse.userID) ? authResponse.userID : null,
 				"subtype1": (KT_GET['kt_st1']) ? KT_GET['kt_st1'] : null,
 				"subtype2": (KT_GET['kt_st2']) ? KT_GET['kt_st2'] : null,
