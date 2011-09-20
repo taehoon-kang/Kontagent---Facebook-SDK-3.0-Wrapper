@@ -236,6 +236,7 @@ FB._trackLanding = function()
 			});
 		}
 
+		// Spruce Media Ad Tracking  
 		if (KT_GET['spruce_adid']) {
 			var spruceUrl = "http://bp-pixel.sprucemedia.com/100480/pixel.ssps";
 			spruceUrl += "?spruce_adid=" + KT_GET["spruce_adid"];
