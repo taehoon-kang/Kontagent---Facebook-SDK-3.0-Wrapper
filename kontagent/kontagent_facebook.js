@@ -5,9 +5,6 @@ BASE_FB.login = FB.login;
 BASE_FB.ui = FB.ui;
 BASE_FB.api = FB.api;
 
-// instantiate the Kontagent JS API
-var useHttps;
-
 // reference to Kontagent API object. Instantiated in FB.init().
 FB._ktApi = null;
 
