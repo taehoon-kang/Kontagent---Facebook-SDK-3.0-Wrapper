@@ -235,6 +235,14 @@ FB._trackLanding = function()
 				"subtype3": (KT_GET['kt_st3']) ? KT_GET['kt_st3'] : null
 			});
 		}
+
+		if (KT_GET['spruce_adid']) {
+			var spruceUrl = "http://bp-pixel.sprucemedia.com/100480/pixel.ssps";
+			spruceUrl += "?spruce_adid=" + KT_GET["spruce_adid"];
+			spruceUrl += "&spruce_sid=" + FB._ktApi.genShortUniqueTrackingTag();
+
+			FB._ktApi.sendHttpRequestViaImgTag(spruceUrl);
+		}
 	}
 }
 
@@ -309,11 +317,33 @@ FB._appendKtVarsToUrl = function(url, vars)
 */
 function KontagentApi(apiKey, optionalParams) {
 	this._baseApiUrl = "http://api.geo.kontagent.net/api/v1/";
+	this._baseHttpsApiUrl = "https://api.geo.kontagent.net/api/v1/";
 	this._baseTestServerUrl = "http://test-server.kontagent.com/api/v1/";
 
 	this._apiKey = apiKey;
 	this._useTestServer = (optionalParams.useTestServer) ? optionalParams.useTestServer : false;
+	this._useHttps = (optionalParams.useHttps) ? optionalParams.useHttps : false;
 	this._validateParams = (optionalParams.validateParams) ? optionalParams.validateParams : false;
+}
+
+/*
+* Sends an HTTP request by creating an <img> tag given a URL.
+*
+* @param {string} url The request URL
+* @param {function} [successCallback] The callback function to execute once message has been sent successfully
+*/
+KontagentApi.prototype._sendHttpRequestViaImgTag(url, successCallback)
+{
+	var img = new Image();
+	
+	// The onerror callback will always be triggered because no image header is returned by our API.
+	// Which is fine because the request would have still gone through.
+	if (successCallback) {
+		img.onerror = successallback;
+		img.onload = successCallback;
+	}
+	
+	img.src = url;
 }
 
 /*
@@ -338,20 +368,19 @@ KontagentApi.prototype._sendMessageViaImgTag = function(messageType, params, suc
 		}
 	}
 
- 	var img = new Image();
-	
-	// The onerror callback will always be triggered because no image header is returned by our API.
-	// Which is fine because the request would have still gone through.
-	if (successCallback) {
-		img.onerror = successallback;
-		img.onload = successCallback;
-	}
-	
+	var url;	
+
 	if (this._useTestServer == true) {
-		img.src = this._baseTestServerUrl + this._apiKey + "/" + messageType + "/?" + this._httpBuildQuery(params);
+		url = this._baseTestServerUrl + this._apiKey + "/" + messageType + "/?" + this._httpBuildQuery(params);
 	} else {
-		img.src = this._baseApiUrl + this._apiKey + "/" + messageType + "/?" + this._httpBuildQuery(params);
+		if (this._useHttps == true) {
+			url = this._baseHttpsApiUrl + this._apiKey + "/" + messageType + "/?" + this._httpBuildQuery(params);
+		} else {
+			url = this._baseApiUrl + this._apiKey + "/" + messageType + "/?" + this._httpBuildQuery(params);
+		}
 	}
+
+	this._sendHttpRequestViaImgTag(url);
 }
 
 /*

@@ -282,9 +282,6 @@ class KontagentFacebook extends Facebook
 		}
 
 		echo '</script>';
-
-
-
 	}
 	
 	// Performs the landing page tracking.
@@ -403,6 +400,15 @@ class KontagentFacebook extends Facebook
 					'subtype2' => (isset($_GET['kt_st2'])) ? $_GET['kt_st2'] : null,
 					'subtype3' => (isset($_GET['kt_st3'])) ? $_GET['kt_st3'] : null
 				));
+			}
+
+			// Spruce Media Ad Tracking  
+			if (isset($_GET['spruce_adid'])) {
+				$spruceUrl = 'http://bp-pixel.sprucemedia.com/100480/pixel.ssps';
+				$spruceUrl .= '?spruce_adid=' . $_GET["spruce_adid"];
+				$spruceUrl .= '&spruce_sid=' . $this->ktApi->genShortUniqueTrackingTag();
+
+				$this->ktApi->sendHttpRequest($spruceUrl);
 			}
 		}
 	}
@@ -555,6 +561,29 @@ class KontagentApi {
 	}
 
 	/*
+	* Sends an HTTP request given a URL
+	*
+	* @param string $url The message type to send ('apa', 'ins', etc.)
+	* @param array $params An associative array containing paramName => value (ex: 's'=>123456789)
+	* @param string $validationErrorMsg The error message on validation failure
+	* 
+	* @return bool Returns false on validation failure, true otherwise
+	*/
+	public function sendHttpRequest($url) {
+		// use curl if available, otherwise use file_get_contents() to send the request
+		if ($this->useCurl) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_exec($ch);
+			curl_close($ch);
+		} else {
+			file_get_contents($url);
+		}
+	}
+
+	/*
 	* Sends the API message.
 	*
 	* @param string $messageType The message type to send ('apa', 'ins', etc.)
@@ -563,7 +592,7 @@ class KontagentApi {
 	* 
 	* @return bool Returns false on validation failure, true otherwise
 	*/
-	private function sendMessage($messageType, $params, &$validationErrorMsg = null) {
+	public function sendMessage($messageType, $params, &$validationErrorMsg = null) {
 		if ($this->validateParams) {
 			// validate the message parameters
 			$validationErrorMsg = null;
@@ -584,17 +613,7 @@ class KontagentApi {
 			$url = $this->baseApiUrl . $this->apiKey . "/" . $messageType . "/?" . http_build_query($params, '', '&');
 		}
 		
-		// use curl if available, otherwise use file_get_contents() to send the request
-		if ($this->useCurl) {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_exec($ch);
-			curl_close($ch);
-		} else {
-			file_get_contents($url);
-		}
+		$this->sendHttpRequest($url);
 
 		return true;
 	}
