@@ -14,6 +14,6 @@
 	define("KT_SEND_CLIENT_SIDE", false);
 
 	// Whether to send client-side tracking messages through HTTPS. This can be set to either
-	// true, false, or 'auto'. If 'auto', the library will detect the protocol the current user is using.
-	define("KT_USE_HTTPS", 'auto');
+	// true, false, or "auto". If "auto", the library will detect the protocol the current user is using.
+	define("KT_USE_HTTPS", "auto");
 ?>
