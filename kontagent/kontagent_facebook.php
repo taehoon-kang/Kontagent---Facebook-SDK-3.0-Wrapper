@@ -315,6 +315,16 @@ class KontagentFacebook extends Facebook
 				));
 			} catch (FacebookApiException $e) { }
 		}
+
+		if (isset($_GET['kt_type'])) {
+			// We generate an shortUniqueTrackingTag and store it in the GET array because this is where 
+			// the code will looks for it when application added is generated.
+
+			// Note that generating this tag is outside the "if (!KT_SEND_CLIENT_SIDE)" because it is always
+			// generated on the server side (otherwise there is no way to get the generated value back to PHP.
+			$_GET['kt_su'] = $this->ktApi->genShortUniqueTrackingTag();
+			echo '<script>KT_GET["kt_su"] = "' . $_GET['kt_su'] . '";</script>';
+		}
 	
 		if (!KT_SEND_CLIENT_SIDE) {
 			if ($this->getUser()) {
@@ -387,12 +397,7 @@ class KontagentFacebook extends Facebook
 				));
 			}
 			
-			if (isset($_GET['kt_type'])) {
-				// generate an short tracking tag. We store it in $_GET because
-				// this is where the code looks for it when an application added is triggered.
-				$_GET['kt_su'] = $this->ktApi->genShortUniqueTrackingTag();
-				echo '<script>KT_GET["kt_su"] = "' . $_GET['kt_su'] . '";</script>';
-			
+			if (isset($_GET['kt_type'])) {		
 				$this->ktApi->trackThirdPartyCommClick($_GET['kt_type'], array(
 					'userId' => ($this->getUser()) ? $this->getUser() : null,
 					'shortUniqueTrackingTag' => $_GET['kt_su'],
@@ -564,10 +569,6 @@ class KontagentApi {
 	* Sends an HTTP request given a URL
 	*
 	* @param string $url The message type to send ('apa', 'ins', etc.)
-	* @param array $params An associative array containing paramName => value (ex: 's'=>123456789)
-	* @param string $validationErrorMsg The error message on validation failure
-	* 
-	* @return bool Returns false on validation failure, true otherwise
 	*/
 	public function sendHttpRequest($url) {
 		// use curl if available, otherwise use file_get_contents() to send the request

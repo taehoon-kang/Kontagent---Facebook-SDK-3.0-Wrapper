@@ -224,10 +224,7 @@ FB._trackLanding = function()
 		}
 		
 		if (KT_GET['kt_type']) {
-			// we store it in the KT_GET variable because this is where the Application Added
-			// tracking looks for it.
-			KT_GET['kt_su'] = FB._ktApi.genShortUniqueTrackingTag();
-			
+			// The shortUniqueTrackingTag is generated on the serverside landing method.			
 			FB._ktApi.trackThirdPartyCommClick(KT_GET['kt_type'], KT_GET['kt_su'], {
 				"userId": (authResponse && authResponse.userID) ? authResponse.userID : null,
 				"subtype1": (KT_GET['kt_st1']) ? KT_GET['kt_st1'] : null,
@@ -333,7 +330,7 @@ function KontagentApi(apiKey, optionalParams) {
 * @param {string} url The request URL
 * @param {function} [successCallback] The callback function to execute once message has been sent successfully
 */
-KontagentApi.prototype._sendHttpRequestViaImgTag(url, successCallback)
+KontagentApi.prototype._sendHttpRequestViaImgTag = function(url, successCallback)
 {
 	var img = new Image();
 	
@@ -699,7 +696,6 @@ KontagentApi.prototype.trackStreamPostResponse = function(uniqueTrackingTag, typ
 *
 * @param {string} userId The UID of the user
 * @param {string} eventName The name of the event
-
 * @param {object} [optionalParams] An object containing paramName => value
 * @param {int} [optionalParams.value] A value associated with the event
 * @param {int} [optionalParams.level] A level associated with the event (must be positive)
@@ -709,7 +705,7 @@ KontagentApi.prototype.trackStreamPostResponse = function(uniqueTrackingTag, typ
 * @param {function} [successCallback] The callback function to execute once message has been sent successfully
 * @param {function(error)} [validationErrorCallback] The callback function to execute on validation failure
 */
-KontagentApi.prototype.trackEvent = function(optionalParams, successCallback, validationErrorCallback) {
+KontagentApi.prototype.trackEvent = function(userId, eventName, optionalParams, successCallback, validationErrorCallback) {
 	var apiParams = {
 		s : userId,
 		n : eventName
